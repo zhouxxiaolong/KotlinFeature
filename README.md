@@ -115,6 +115,24 @@ fun main() {
     println(result::class)
 }
 ```
+
+## 带有默认参数的函数的类型支持
+如果一个函数有默认参数，我们在调用它的时候就可以不传入这个参数了，例如：
+`fun foo(i: Int = 0): String = "$i!"`
+调用的时候既可以是 foo() 也可以是 foo(5)
+
+在 1.4 以前，如果我们想要获取它的引用，就只能获取到 (Int) -> String 这样的类型，显得不是很方便，现在这个问题解决了：
+
+```
+
+fun apply1(func: () -> String): String = func()
+fun apply2(func: (Int) -> String): String = func(42)
+
+fun main() {
+    println(apply1(::foo))
+    println(apply2(::foo))
+}
+```
 # 参考资料
 
 【1】[Kotlin公众号](https://mp.weixin.qq.com/s?__biz=MzIzMTYzOTYzNA==&mid=2247484576&idx=1&sn=d61d2fd19ce4fbf380d31283687deeec&chksm=e8a05b9ddfd7d28b9bb1d1146afbe2ef70b3f53892edfc536536badb1ab2d6b6fc04b9a18ddb&mpshare=1&scene=1&srcid=&sharer_sharetime=1586662469474&sharer_shareid=0d0ed9221bc1223986748805236d1451#rd)
