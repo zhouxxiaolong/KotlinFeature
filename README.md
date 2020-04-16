@@ -91,7 +91,7 @@ fun main() {
 }
 ```
 Tips:
-这个问题我在1.3版本的kotlin中运行会报错
+这个问题我在1.3版本的kotlin中编译会报错
 `Kotlin: Type inference failed. Expected type mismatch: inferred type is Map<String, Function<Boolean>> but Map<String, (String?) -> Boolean> was expected`
 
 ## Lambda 表达式最后一行的智能类型转换
@@ -133,6 +133,44 @@ fun main() {
     println(apply2(::foo))
 }
 ```
+## 属性代理的类型推导
+在推断代理表达式的类型时，以往不会考虑属性代理的类型，因此我们经常需要在代理表达式中显式的声明泛型参数，下面的例子就是这样：
+
+```
+    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
+        println("$old → $new")
+    }
+    prop = "abc"
+    prop = "xyz"
+```
+这个例子在 1.4 中可以运行，但如果是在 1.3 当中，就需要明确泛型类型：
+
+```
+    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
+        println("$old → $new")
+    }
+```
+
+##混合位置参数和具名参数
+位置参数就是按位置传入的参数，java中只支持位置参数
+具名参数就是按名字传入的参数，kotlin支持，但是1.4之前，kotlin 不支持混合
+比如以下的写法是不可以的
+
+```
+fun f(a: Int, b: Int, c: Int) {
+    println("a=$a,b=$b,c=$c")
+}
+
+fun main() {
+    f(a = 2, 3, 4)
+}
+```
+假如混用呢，如下
+` f(c = 1, a = 2, 3, 4)`
+会发现c=1不认。
+
+
+
 # 参考资料
 
 【1】[Kotlin公众号](https://mp.weixin.qq.com/s?__biz=MzIzMTYzOTYzNA==&mid=2247484576&idx=1&sn=d61d2fd19ce4fbf380d31283687deeec&chksm=e8a05b9ddfd7d28b9bb1d1146afbe2ef70b3f53892edfc536536badb1ab2d6b6fc04b9a18ddb&mpshare=1&scene=1&srcid=&sharer_sharetime=1586662469474&sharer_shareid=0d0ed9221bc1223986748805236d1451#rd)
