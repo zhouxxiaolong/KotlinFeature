@@ -283,5 +283,5 @@ open class HelloKotlinFeature {
 
 # 参考资料
 
-【1】[Kotlin公众号](https://mp.weixin.qq.com/s?__biz=MzIzMTYzOTYzNA==&mid=2247484576&idx=1&sn=d61d2fd19ce4fbf380d31283687deeec&chksm=e8a05b9ddfd7d28b9bb1d1146afbe2ef70b3f53892edfc536536badb1ab2d6b6fc04b9a18ddb&mpshare=1&scene=1&srcid=&sharer_sharetime=1586662469474&sharer_shareid=0d0ed9221bc1223986748805236d1451#rd)
+[Kotlin公众号](https://mp.weixin.qq.com/s?__biz=MzIzMTYzOTYzNA==&mid=2247484576&idx=1&sn=d61d2fd19ce4fbf380d31283687deeec&chksm=e8a05b9ddfd7d28b9bb1d1146afbe2ef70b3f53892edfc536536badb1ab2d6b6fc04b9a18ddb&mpshare=1&scene=1&srcid=&sharer_sharetime=1586662469474&sharer_shareid=0d0ed9221bc1223986748805236d1451#rd)
 
