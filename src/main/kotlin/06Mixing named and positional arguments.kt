@@ -6,10 +6,12 @@
  * 参   考: @link
  * 描   述:
  */
-fun f(a: Int, b: Int, c: Int) {
+fun f(a: Int = 0, b: Int = 0, c: Int = 0) {
     println("a=$a,b=$b,c=$c")
 }
 
 fun main() {
     f(a = 2, 3, 4)
+    //1.4之前这样是可以的
+    f(2, b = 3, c = 4)
 }

@@ -153,7 +153,7 @@ fun main() {
 
 ##混合位置参数和具名参数
 位置参数就是按位置传入的参数，java中只支持位置参数
-具名参数就是按名字传入的参数，kotlin支持，但是1.4之前，kotlin 不支持混合
+具名参数就是按名字传入的参数，可以完全不按照位置传，kotlin支持，但是1.4之前，kotlin 不支持混合
 比如以下的写法是不可以的
 
 ```
@@ -163,11 +163,94 @@ fun f(a: Int, b: Int, c: Int) {
 
 fun main() {
     f(a = 2, 3, 4)
+    //1.4之前这样是可以的
+    f(2, b = 3, c = 4)
 }
 ```
 假如混用呢，如下
 ` f(c = 1, a = 2, 3, 4)`
 会发现c=1不认。
+
+## 优化属性代理的编译（没懂）
+
+## 参数列表最后的逗号
+很简单，JavaScript之前就支持
+```
+data class Person(val name: String, val age: Int, val id: Int)
+
+fun main() {
+    val person = Person(
+        "huahua",
+        30,
+        1,
+    )
+    val s = listOf(
+        1,
+        2,
+        3,
+        4,
+    )
+}
+```
+Tips:
+JSON 的最后一个字段后面是不允许加逗号的
+
+## when 表达式中使用 continue 和 break
+continue 和 break 的含义没有任何变化，1.4版本之前是不可以使用continue 和 break 的
+
+
+```
+
+fun main() {
+    val list = listOf(0, 1, 2, "3", 4.0, 5F)
+    for (i in list) {
+        when (i) {
+            0, 1 -> {
+                println("0,1")
+            }
+            2 -> {
+                continue
+            }
+            4.0 -> {
+                break
+            }
+            else -> {
+                println(i)
+            }
+        }
+    }
+}
+```
+
+## 尾递归函数的优化
+两个变动：
+尾递归函数的默认参数的初始化顺序改为从左向右
+```
+var counter = 0
+fun inc() = counter++
+
+tailrec fun test(i: Int, x: Int = inc(), y: Int = inc()) {
+    println("x: $x, y: $y")
+    if (i > 0) test(i - 1)
+}
+
+fun main() {
+    test(1)
+}
+```
+
+```
+1.4：
+x: 0, y: 1
+x: 2, y: 3
+
+1.3：
+x: 0, y: 1
+x: 3, y: 2
+```
+
+## 契约(Experimental)
+
 
 
 
