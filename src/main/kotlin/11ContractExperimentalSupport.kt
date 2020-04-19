@@ -44,4 +44,26 @@ fun main() {
         println(str.length)
     }
 
+    println("ss".checkTextIsValid(otherCheck = fun(): Boolean { return false }))
+
+}
+
+@ExperimentalContracts
+inline fun CharSequence?.checkTextIsValid(otherCheck: () -> Boolean): Boolean {
+    contract {
+//        returns(true) implies (s != null)
+        returns(true) implies (this@checkTextIsValid is String)
+    }
+    return null != this && this.isNotEmpty() && otherCheck.invoke()
+}
+
+open class ContractExperimental {
+    @ExperimentalContracts
+            /**open*/
+    fun checkTextIsValid(s: String?): Boolean {
+        contract {
+            returns(true) implies (s is String)
+        }
+        return null != s && s.isNotEmpty()
+    }
 }

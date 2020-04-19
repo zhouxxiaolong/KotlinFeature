@@ -250,8 +250,35 @@ x: 3, y: 2
 ```
 
 ## 契约(Experimental)
+从 1.3 开始，Kotlin 引入了一个实验特性契约（Contract），主要来应对一些“显而易见”情况下的类型推导或者智能类型转换。
 
+在 1.4 当中，这个特性仍然继续保持实验状态，不过有两项改进：
 
+* 支持使用内联特化的函数来实现契约
+* 1.3当中不能为成员函数添加契约，从1.4开始支持为 final 的成员函数添加契约（当然任意成员函数可能存在被覆写的问题，因而不能添加）
+
+```
+@ExperimentalContracts
+inline fun CharSequence?.checkTextIsValid(otherCheck: () -> Boolean): Boolean {
+    contract {
+//        returns(true) implies (s != null)
+        returns(true) implies (this@checkTextIsValid is String)
+    }
+    return null != this && this.isNotEmpty() && otherCheck.invoke()
+}
+```
+
+```
+open class HelloKotlinFeature {
+    @ExperimentalContracts
+    /**open*/ fun checkTextIsValid(s: String?): Boolean {
+        contract {
+            returns(true) implies (s is String)
+        }
+        return null != s && s.isNotEmpty()
+    }
+}
+```
 
 
 # 参考资料
