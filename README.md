@@ -62,6 +62,18 @@ view.setOnClickListener{
 ```
 其实不是的，因为这里的setOnClickListener是一个java方法，OnClickListener也是一个java接口，要是其中的任何一个条件不满足，在1.4之前的版本都是不支持SAM的。例如setOnClickListener是一个kotlin方法又或者OnClickListener 是一个kolin接口。
 
+还有一种写法：
+
+```
+fun runFunction(run: () -> Unit) {
+    run()
+}
+
+runFunction {
+    println("I can run a function")
+}
+```
+
 ## 类型推导支持了更多的场景
 类型推导让 Kotlin 的语法获得了极大的简洁性。不过，大家在使用 Kotlin 开发时，一定会发现有些情况下明明类型是很确定的，编译器却一定要让我们显式的声明出来，这其实就是类型推导算法没有覆盖到的场景了。
 

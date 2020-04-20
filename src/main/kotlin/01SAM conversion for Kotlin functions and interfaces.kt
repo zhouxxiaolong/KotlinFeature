@@ -28,6 +28,10 @@ fun runAction(a: Action) = a.run()
 // Kotlin 函数，参数为 Java 单一方法接口
 fun runRunnable(r: Runnable) = r.run()
 
+fun runFunction(run: () -> Unit) {
+    run()
+}
+
 fun main() {
     //1.4 以前，只能这样调用
     runAction(object : Action {
@@ -50,6 +54,10 @@ fun main() {
 
     runRunnable {
         println("Hello, Kotlin 1.4!")
+    }
+
+    runFunction {
+        println("I can run a function")
     }
 
 }
