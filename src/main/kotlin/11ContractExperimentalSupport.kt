@@ -59,8 +59,7 @@ inline fun CharSequence?.checkTextIsValid(otherCheck: () -> Boolean): Boolean {
 
 open class ContractExperimental {
     @ExperimentalContracts
-            /**open*/
-    fun checkTextIsValid(s: String?): Boolean {
+    /**open*/ fun checkTextIsValid(s: String?): Boolean {
         contract {
             returns(true) implies (s is String)
         }
