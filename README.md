@@ -88,7 +88,8 @@ val rulesMap: Map<String, (String?) -> Boolean> = mapOf(
     "weak" to { it != null },
     "medium" to { !it.isNullOrBlank() },
     "strong" to { it != null && "^[a-zA-Z0-9]+$".toRegex().matches(it) },
-    //1.4版本之前使用以下两种方式
+    //1.4版本之前可以使用以下三种方式
+    "old" to { it -> it != null },
     "isAbc" to isAbc,
     "true" to ::alwaysTrue,
 )
@@ -98,6 +99,7 @@ fun main() {
     println(rulesMap.getValue("weak")("abc!"))
     println(rulesMap.getValue("strong")("abc"))
     println(rulesMap.getValue("strong")("abc!"))
+    println(rulesMap.getValue("old")("abc!"))
     println(rulesMap.getValue("isAbc")("abc"))
     println(rulesMap.getValue("true")(null))
 }
