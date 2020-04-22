@@ -307,17 +307,14 @@ x: 5, y: 4
 
 在 1.4 当中，这个特性仍然继续保持实验状态，不过有两项改进：
 
-* 支持使用内联特化的函数来实现契约
+* 现在可以使用具体化的泛型类型参数来定义协定。
 * 1.3当中不能为成员函数添加契约，从1.4开始支持为 final 的成员函数添加契约（当然任意成员函数可能存在被覆写的问题，因而不能添加）
 
 ```
-@ExperimentalContracts
-inline fun CharSequence?.checkTextIsValid(otherCheck: () -> Boolean): Boolean {
+inline fun <reified T> assertIsInstance(value: Any?){
     contract {
-//        returns(true) implies (s != null)
-        returns(true) implies (this@checkTextIsValid is String)
+        returns() implies (value is T)
     }
-    return null != this && this.isNotEmpty() && otherCheck.invoke()
 }
 ```
 

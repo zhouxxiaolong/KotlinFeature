@@ -17,6 +17,7 @@ fun textIsValid(s: String?): Boolean {
 @ExperimentalContracts
 fun checkTextIsValid(s: String?): Boolean {
     contract {
+        // “如果这个函数成功返回，那么传入的‘s’为 String 类型”
 //        returns(true) implies (s != null)
         returns(true) implies (s is String)
     }
@@ -26,7 +27,8 @@ fun checkTextIsValid(s: String?): Boolean {
 @ExperimentalContracts
 fun main() {
 
-    var str: String? = "ssss"
+    var str: String? = "ssssss"
+    var strNull: String? = null
 
     if (textIsValid(str)) {
         println(str?.length)
@@ -44,17 +46,16 @@ fun main() {
         println(str.length)
     }
 
-    println("ss".checkTextIsValid(otherCheck = fun(): Boolean { return false }))
-
+    assertIsInstance<String>(strNull)
+    println(strNull.length)
+    println("---------")
 }
 
 @ExperimentalContracts
-inline fun CharSequence?.checkTextIsValid(otherCheck: () -> Boolean): Boolean {
+inline fun <reified T> assertIsInstance(value: Any?){
     contract {
-//        returns(true) implies (s != null)
-        returns(true) implies (this@checkTextIsValid is String)
+        returns() implies (value is T)
     }
-    return null != this && this.isNotEmpty() && otherCheck.invoke()
 }
 
 open class ContractExperimental {
