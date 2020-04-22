@@ -9,7 +9,8 @@ import kotlin.properties.Delegates
  * 描   述:
  */
 fun main() {
-    var prop: String? by Delegates.observable(null) { p, old, new ->
+    //1.3 当中，就需要明确泛型类型<String?>
+    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
         println("$old → $new")
     }
     prop = "abc"

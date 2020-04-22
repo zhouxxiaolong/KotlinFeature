@@ -1,7 +1,7 @@
 # KotlinFeature
 > Kotlin 1.4 NewFeature 
 
-## Kotlin 接口和函数的 SAM（Single Abstract Method） 转换
+## 01 Kotlin 接口和函数的 SAM（Single Abstract Method） 转换
 首先需要创建一个SAM interface，需要在接口前加上`fun`关键字
 
 ```
@@ -74,7 +74,7 @@ runFunction {
 }
 ```
 
-## 类型推导支持了更多的场景
+## 02 类型推导支持了更多的场景
 类型推导让 Kotlin 的语法获得了极大的简洁性。不过，大家在使用 Kotlin 开发时，一定会发现有些情况下明明类型是很确定的，编译器却一定要让我们显式的声明出来，这其实就是类型推导算法没有覆盖到的场景了。
 
 ```
@@ -108,7 +108,7 @@ Tips:
 这个问题我在1.3版本的kotlin中编译会报错
 `Kotlin: Type inference failed. Expected type mismatch: inferred type is Map<String, Function<Boolean>> but Map<String, (String?) -> Boolean> was expected`
 
-## Lambda 表达式最后一行的智能类型转换
+## 03 Lambda 表达式最后一行的智能类型转换
 
 ```
 val result = run {
@@ -129,8 +129,60 @@ fun main() {
     println(result::class)
 }
 ```
+## 04 可调用类型（Callable）引用的智能转换
 
-## 带有默认参数的函数的类型支持
+```
+sealed class Animal
+
+class Cat : Animal() {
+    fun meow() {
+        println("meow")
+    }
+}
+
+class Dog : Animal() {
+    fun woof() {
+        println("woof")
+    }
+}
+
+fun perform(animal: Animal) {
+    val kFunction: KFunction<*> = when (animal) {
+        is Cat -> animal::meow
+        is Dog -> animal::woof
+    }
+
+    kFunction.call()
+}
+
+fun main(){
+    perform(Cat())
+    perform(Dog())
+}
+```
+
+在kotlin 1.3中，你无法访问智能转换类型引用的成员（Unresolved reference: meow），但是现在可以了。
+在将 Animal变量智能地强制转换为特定类型的Cat和Dog之后，可以使用不同的成员引用animal :: meow和animal :: woof。在检查类型之后，就可以访问与子类型相对应的成员引用了。
+
+## 05 属性代理的类型推导
+在推断代理表达式的类型时，以往不会考虑属性代理的类型，因此我们经常需要在代理表达式中显式的声明泛型参数，下面的例子就是这样：
+
+```
+    var prop: String? by Delegates.observable(null) { p, old, new ->
+        println("$old → $new")
+    }
+    prop = "abc"
+    prop = "xyz"
+```
+这个例子在 1.4 中可以运行，但如果是在 1.3 当中，就需要明确泛型类型<String?>：
+
+```
+    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
+        println("$old → $new")
+    }
+```
+
+## 06 带有默认参数的函数的类型支持
 如果一个函数有默认参数，我们在调用它的时候就可以不传入这个参数了，例如：
 `fun foo(i: Int = 0): String = "$i!"`
 调用的时候既可以是 foo() 也可以是 foo(5)
@@ -147,25 +199,8 @@ fun main() {
     println(apply2(::foo))
 }
 ```
-## 属性代理的类型推导
-在推断代理表达式的类型时，以往不会考虑属性代理的类型，因此我们经常需要在代理表达式中显式的声明泛型参数，下面的例子就是这样：
 
-```
-    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
-        println("$old → $new")
-    }
-    prop = "abc"
-    prop = "xyz"
-```
-这个例子在 1.4 中可以运行，但如果是在 1.3 当中，就需要明确泛型类型：
-
-```
-    var prop: String? by Delegates.observable<String?>(null) { p, old, new ->
-        println("$old → $new")
-    }
-```
-
-##混合位置参数和具名参数
+## 07 混合位置参数和具名参数
 位置参数就是按位置传入的参数，java中只支持位置参数
 具名参数就是按名字传入的参数，可以完全不按照位置传，kotlin支持，但是1.4之前，kotlin 不支持混合
 比如以下的写法是不可以的
@@ -185,9 +220,9 @@ fun main() {
 ` f(c = 1, a = 2, 3, 4)`
 会发现c=1不认。
 
-## 优化属性代理的编译（没懂）
+## 08 优化属性代理的编译（没懂）
 
-## 参数列表最后的逗号
+## 09 参数列表最后的逗号
 很简单，JavaScript之前就支持
 ```
 data class Person(val name: String, val age: Int, val id: Int)
@@ -209,7 +244,7 @@ fun main() {
 Tips:
 JSON 的最后一个字段后面是不允许加逗号的
 
-## when 表达式中使用 continue 和 break
+## 10 when 表达式中使用 continue 和 break
 continue 和 break 的含义没有任何变化，1.4版本之前是不可以使用continue 和 break 的
 
 
@@ -236,9 +271,11 @@ fun main() {
 }
 ```
 
-## 尾递归函数的优化
+## 11 尾递归函数的优化
 两个变动：
-尾递归函数的默认参数的初始化顺序改为从左向右
+* 尾递归函数的默认参数的初始化顺序改为从左向右
+* 尾递归函数不能声明为 open 的，即不能被子类覆写，因为尾递归函数的形式有明确的要求，即函数的最后一个操作必须只能是调用自己，父类的函数声明为 tailrec 并不能保证子类能够正确地按要求覆写，于是产生矛盾。
+
 ```
 var counter = 0
 fun inc() = counter++
@@ -249,7 +286,7 @@ tailrec fun test(i: Int, x: Int = inc(), y: Int = inc()) {
 }
 
 fun main() {
-    test(1)
+    test(2)
 }
 ```
 
@@ -257,13 +294,15 @@ fun main() {
 1.4：
 x: 0, y: 1
 x: 2, y: 3
+x: 4, y: 5
 
 1.3：
 x: 0, y: 1
 x: 3, y: 2
+x: 5, y: 4
 ```
 
-## 契约(Experimental)
+## 12 契约(Experimental)
 从 1.3 开始，Kotlin 引入了一个实验特性契约（Contract），主要来应对一些“显而易见”情况下的类型推导或者智能类型转换。
 
 在 1.4 当中，这个特性仍然继续保持实验状态，不过有两项改进：

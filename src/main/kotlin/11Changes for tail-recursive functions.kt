@@ -15,5 +15,5 @@ tailrec fun test(i: Int, x: Int = inc(), y: Int = inc()) {
 }
 
 fun main() {
-    test(1)
+    test(2)
 }

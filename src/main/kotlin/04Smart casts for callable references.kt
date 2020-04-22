@@ -1,3 +1,5 @@
+import kotlin.reflect.KFunction
+
 /**
  * Created
  * 创 建 人: @author zhouxiaolong
@@ -6,12 +8,30 @@
  * 参   考: @link
  * 描   述:
  */
-fun foo(i: Int = 0): String = "$i!"
+sealed class Animal
 
-fun apply1(func: () -> String): String = func()
-fun apply2(func: (Int) -> String): String = func(42)
+class Cat : Animal() {
+    fun meow() {
+        println("meow")
+    }
+}
 
-fun main() {
-    println(apply1(::foo))
-    println(apply2(::foo))
+class Dog : Animal() {
+    fun woof() {
+        println("woof")
+    }
+}
+
+fun perform(animal: Animal) {
+    val kFunction: KFunction<*> = when (animal) {
+        is Cat -> animal::meow
+        is Dog -> animal::woof
+    }
+
+    kFunction.call()
+}
+
+fun main(){
+    perform(Cat())
+    perform(Dog())
 }
