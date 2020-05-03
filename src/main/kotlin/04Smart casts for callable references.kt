@@ -8,30 +8,39 @@ import kotlin.reflect.KFunction
  * 参   考: @link
  * 描   述:
  */
-sealed class Animal
+sealed class Animal {
+    fun eat() {
+        println("eat")
+    }
+}
 
-class Cat : Animal() {
+object Cat : Animal() {
     fun meow() {
         println("meow")
     }
 }
 
-class Dog : Animal() {
+object Dog : Animal() {
     fun woof() {
         println("woof")
     }
 }
 
 fun perform(animal: Animal) {
+
     val kFunction: KFunction<*> = when (animal) {
-        is Cat -> animal::meow
-        is Dog -> animal::woof
+        is Cat -> {
+            animal::eat
+        }
+        is Dog -> {
+            animal::eat
+        }
     }
 
     kFunction.call()
 }
 
-fun main(){
-    perform(Cat())
-    perform(Dog())
+fun main() {
+    perform(Cat)
+    perform(Dog)
 }
