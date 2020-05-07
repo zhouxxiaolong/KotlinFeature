@@ -60,4 +60,12 @@ fun main() {
         println("I can run a function")
     }
 
+    //1.4之前的版本两个参数需要都为 lambda 或常规对象，不可以混合
+    JavaClass().runAction(
+        { println("111") },
+        object : JavaClass.Action2 {
+            override fun run() {
+                println("222")
+            }
+        })
 }
