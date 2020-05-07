@@ -20,12 +20,16 @@ val rulesMap: Map<String, (String?) -> Boolean> = mapOf(
     "old" to { it -> it != null },
     "isAbc" to isAbc,
     "true" to ::alwaysTrue,
+    "operate" too { it != null }
 )
 
 //1.4版本之前还可以使用以下方式
 val allMap = mutableMapOf<String, (String?) -> Boolean>().apply {
     this["all"] = { it?.length ?: 0 > 0 }
 }
+
+//1.4版本之前还可以使用以下方式
+infix fun String.too(body: (String?) -> Boolean) = Pair(this, body)
 
 fun calLength(f: (String?) -> Int) {
     println(f("ss"))
@@ -40,6 +44,7 @@ fun main() {
     println(allMap.getValue("old")("abc!"))
     println(allMap.getValue("isAbc")("abc"))
     println(allMap.getValue("true")(null))
+    println(allMap.getValue("operate")(null))
 
     calLength {
         it?.length ?: 0
