@@ -16,20 +16,20 @@ val rulesMap: Map<String, (String?) -> Boolean> = mapOf(
     "weak" to { it != null },
     "medium" to { !it.isNullOrBlank() },
     "strong" to { it != null && "^[a-zA-Z0-9]+$".toRegex().matches(it) },
-    //1.4版本之前可以使用以下三种方式，注意下面的lambda 参数 it
+    //1.4版本之前可以使用以下几种方式
+    // 注意下面的lambda 参数 it
     "old" to { it -> it != null },
     "isAbc" to isAbc,
     "true" to ::alwaysTrue,
-    "operate" too { it != null }
+    "operate" too { it != null },
+    "s".to { it != null },
+    Pair<String, (String?) -> Boolean>("ss", { it != null })
 )
 
 //1.4版本之前还可以使用以下方式
 val allMap = mutableMapOf<String, (String?) -> Boolean>().apply {
     this["all"] = { it?.length ?: 0 > 0 }
 }
-
-//1.4版本之前还可以使用以下方式
-infix fun String.too(body: (String?) -> Boolean) = Pair(this, body)
 
 fun calLength(f: (String?) -> Int) {
     println(f("ss"))
@@ -38,16 +38,22 @@ fun calLength(f: (String?) -> Int) {
 fun main() {
     allMap.putAll(rulesMap)
     println(allMap.getValue("all")("abc!"))
-    println(allMap.getValue("weak")("abc!"))
-    println(allMap.getValue("strong")("abc"))
-    println(allMap.getValue("strong")("abc!"))
+//    println(allMap.getValue("weak")("abc!"))
+//    println(allMap.getValue("strong")("abc"))
+//    println(allMap.getValue("strong")("abc!"))
     println(allMap.getValue("old")("abc!"))
     println(allMap.getValue("isAbc")("abc"))
     println(allMap.getValue("true")(null))
-    println(allMap.getValue("operate")(null))
+    println(allMap.getValue("operate")("sssssss"))
+    println(allMap.getValue("s")("sssssss"))
+    println(allMap.getValue("ss")("sssssss"))
 
     calLength {
         it?.length ?: 0
     }
 
 }
+
+fun String.to(body: (String?) -> Boolean) = Pair(this, body)
+
+infix fun String.too(body: (String?) -> Boolean) = Pair(this, body)
