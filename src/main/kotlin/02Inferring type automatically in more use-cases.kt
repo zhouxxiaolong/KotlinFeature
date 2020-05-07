@@ -22,12 +22,18 @@ val rulesMap: Map<String, (String?) -> Boolean> = mapOf(
     "true" to ::alwaysTrue,
 )
 
+//1.4版本之前还可以使用以下方式
+val allMap = mutableMapOf<String, (String?) -> Boolean>().apply {
+    this["all"] = { it?.length ?: 0 > 0 }
+}
 
 fun main() {
-    println(rulesMap.getValue("weak")("abc!"))
-    println(rulesMap.getValue("strong")("abc"))
-    println(rulesMap.getValue("strong")("abc!"))
-    println(rulesMap.getValue("old")("abc!"))
-    println(rulesMap.getValue("isAbc")("abc"))
-    println(rulesMap.getValue("true")(null))
+    allMap.putAll(rulesMap)
+    println(allMap.getValue("all")("abc!"))
+    println(allMap.getValue("weak")("abc!"))
+    println(allMap.getValue("strong")("abc"))
+    println(allMap.getValue("strong")("abc!"))
+    println(allMap.getValue("old")("abc!"))
+    println(allMap.getValue("isAbc")("abc"))
+    println(allMap.getValue("true")(null))
 }
