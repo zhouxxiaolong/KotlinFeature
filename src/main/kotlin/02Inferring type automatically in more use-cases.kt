@@ -27,6 +27,10 @@ val allMap = mutableMapOf<String, (String?) -> Boolean>().apply {
     this["all"] = { it?.length ?: 0 > 0 }
 }
 
+fun calLength(f: (String?) -> Int) {
+    println(f("ss"))
+}
+
 fun main() {
     allMap.putAll(rulesMap)
     println(allMap.getValue("all")("abc!"))
@@ -36,4 +40,9 @@ fun main() {
     println(allMap.getValue("old")("abc!"))
     println(allMap.getValue("isAbc")("abc"))
     println(allMap.getValue("true")(null))
+
+    calLength {
+        it?.length ?: 0
+    }
+
 }
