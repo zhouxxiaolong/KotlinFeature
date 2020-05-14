@@ -22,6 +22,14 @@ fun interface Action {
     }
 }
 
+fun interface Action1 {
+    fun run()
+}
+
+fun interface Action2 {
+    fun run()
+}
+
 // Kotlin 函数，参数为 Kotlin 单一方法接口
 fun runAction(a: Action) = a.run()
 
@@ -30,6 +38,11 @@ fun runRunnable(r: Runnable) = r.run()
 
 fun runFunction(run: () -> Unit) {
     run()
+}
+
+fun runActionAll(action1: Action1, action2: Action2) {
+    action1.run()
+    action2.run()
 }
 
 fun main() {
@@ -64,6 +77,13 @@ fun main() {
     JavaClass().runAction(
         { println("111") },
         object : JavaClass.Action2 {
+            override fun run() {
+                println("222")
+            }
+        })
+
+    runActionAll({ println("111") },
+        object : Action2 {
             override fun run() {
                 println("222")
             }

@@ -30,10 +30,10 @@ fun perform(animal: Animal) {
 
     val kFunction: KFunction<*> = when (animal) {
         is Cat -> {
-            animal::eat
+            animal::meow
         }
         is Dog -> {
-            animal::eat
+            animal::woof
         }
     }
 
