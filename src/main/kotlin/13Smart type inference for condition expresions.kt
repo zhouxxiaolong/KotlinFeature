@@ -4,7 +4,8 @@
  * 创建日期: 2020/4/20
  * 邮   箱: 1016579848@qq.com
  * 参   考: @link
- * 描   述:
+ * 描   述: 参考
+ *          https://mp.weixin.qq.com/s/Eh33lqEyL5HeGehuvuHKmA
  */
 fun validation(): Boolean {
     return true
